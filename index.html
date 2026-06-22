@@ -1,0 +1,1216 @@
+<!doctype html>
+<html lang="km">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>N4NO</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #0b0f14;
+        --panel: #11161d;
+        --panel-2: #161d26;
+        --line: #232c37;
+        --text: #e8edf2;
+        --text-dim: #8a97a6;
+        --text-faint: #5b6675;
+        --amber: #ffb454;
+        --amber-dim: #c98a35;
+        --teal: #5fd3bc;
+        --green: #2ee07a;
+        --red: #ff6b6b;
+        --mono: "JetBrains Mono", monospace;
+        --sans: "Inter", sans-serif;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        line-height: 1.6;
+        overflow-x: hidden;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+          linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0.015) 1px,
+            transparent 1px
+          );
+        background-size: 48px 48px;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      ::selection {
+        background: var(--amber);
+        color: #0b0f14;
+      }
+
+      /* ---------- SCROLLBAR ---------- */
+      html {
+        scrollbar-width: thin;
+        scrollbar-color: var(--green) var(--bg);
+      }
+      ::-webkit-scrollbar {
+        width: 10px;
+      }
+      ::-webkit-scrollbar-track {
+        background: var(--bg);
+      }
+      ::-webkit-scrollbar-thumb {
+        background: var(--green);
+        border-radius: 0;
+        box-shadow: 0 0 10px rgba(46, 224, 122, 0.5);
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #27c46b;
+      }
+
+      .wrap {
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 0 28px;
+        position: relative;
+        z-index: 1;
+      }
+
+      /* ---------- NAV ---------- */
+      nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 50;
+        backdrop-filter: blur(10px);
+        background: rgba(11, 15, 20, 0.78);
+        border-bottom: 1px solid var(--line);
+      }
+      nav .wrap {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 64px;
+      }
+      .nav-logo {
+        font-family: var(--mono);
+        font-weight: 700;
+        font-size: 15px;
+        letter-spacing: 0.5px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .nav-logo .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--green);
+        box-shadow: 0 0 8px var(--green);
+        animation: pulse 2s ease-in-out infinite;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.35;
+        }
+      }
+      .nav-links {
+        display: flex;
+        gap: 32px;
+        font-family: var(--mono);
+        font-size: 13px;
+        color: var(--text-dim);
+      }
+      .nav-links a {
+        transition: color 0.2s;
+        position: relative;
+      }
+      .nav-links a:hover {
+        color: var(--amber);
+      }
+      .nav-links span {
+        color: var(--text-faint);
+      }
+
+      @media (max-width: 680px) {
+        .nav-links {
+          display: none;
+        }
+      }
+
+      /* ---------- HERO ---------- */
+      header.hero {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        padding-top: 64px;
+        position: relative;
+      }
+      .terminal {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        width: 100%;
+        box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.6);
+        overflow: hidden;
+      }
+      .term-bar {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 11px 16px;
+        background: var(--panel-2);
+        border-bottom: 1px solid var(--line);
+      }
+      .term-bar .tdot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+      }
+      .term-bar .tdot:nth-child(1) {
+        background: #ff6b6b;
+      }
+      .term-bar .tdot:nth-child(2) {
+        background: #ffb454;
+      }
+      .term-bar .tdot:nth-child(3) {
+        background: var(--green);
+      }
+      .term-title {
+        margin-left: 8px;
+        font-family: var(--mono);
+        font-size: 12px;
+        color: var(--text-faint);
+      }
+      .term-body {
+        font-family: var(--mono);
+        padding: 32px clamp(20px, 4vw, 48px) 40px;
+        font-size: clamp(13px, 1.6vw, 15px);
+      }
+      .term-line {
+        color: var(--text-dim);
+        margin-bottom: 6px;
+      }
+      .term-line .prompt {
+        color: var(--teal);
+      }
+      .term-line .path {
+        color: var(--amber-dim);
+      }
+      .typed {
+        color: var(--text);
+      }
+      .cursor {
+        display: inline-block;
+        width: 8px;
+        height: 1.1em;
+        background: var(--amber);
+        margin-left: 2px;
+        vertical-align: -2px;
+        animation: blink 1s step-end infinite;
+      }
+      @keyframes blink {
+        50% {
+          opacity: 0;
+        }
+      }
+
+      .hero-name {
+        font-family: var(--mono);
+        font-weight: 800;
+        font-size: clamp(40px, 8vw, 84px);
+        line-height: 1;
+        margin: 22px 0 6px;
+        color: var(--text);
+        letter-spacing: -1px;
+      }
+      .hero-name .x {
+        color: var(--amber);
+      }
+      .hero-role {
+        font-family: var(--sans);
+        font-size: clamp(16px, 2vw, 19px);
+        color: var(--text-dim);
+        margin-bottom: 24px;
+        max-width: 560px;
+      }
+      .hero-role strong {
+        color: var(--text);
+        font-weight: 600;
+      }
+
+      .status-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 8px;
+      }
+      .status-chip {
+        font-family: var(--mono);
+        font-size: 12px;
+        border: 1px solid var(--line);
+        background: var(--panel-2);
+        padding: 6px 12px;
+        border-radius: 5px;
+        color: var(--text-dim);
+        display: flex;
+        align-items: center;
+        gap: 7px;
+      }
+      .status-chip::before {
+        content: "●";
+        color: var(--green);
+        font-size: 9px;
+      }
+
+      /* ---------- SECTION SHARED ---------- */
+      section {
+        padding: 110px 0;
+        border-top: 1px solid var(--line);
+        position: relative;
+      }
+      .sec-head {
+        margin-bottom: 52px;
+      }
+      .sec-tag {
+        font-family: var(--mono);
+        font-size: 12px;
+        color: var(--amber);
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        display: block;
+        margin-bottom: 14px;
+      }
+      .sec-tag::before {
+        content: "// ";
+        color: var(--text-faint);
+      }
+      .sec-title {
+        font-family: var(--mono);
+        font-weight: 700;
+        font-size: clamp(26px, 4vw, 38px);
+        color: var(--text);
+        letter-spacing: -0.5px;
+      }
+      .sec-sub {
+        color: var(--text-dim);
+        margin-top: 14px;
+        max-width: 600px;
+        font-size: 15.5px;
+      }
+
+      /* ---------- LOG-STYLE ABOUT ---------- */
+      .log-block {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 0;
+        overflow: hidden;
+      }
+      .log-row {
+        display: grid;
+        grid-template-columns: 140px 1fr;
+        border-bottom: 1px solid var(--line);
+        font-family: var(--mono);
+        font-size: 13.5px;
+      }
+      .log-row:last-child {
+        border-bottom: none;
+      }
+      .log-key {
+        padding: 18px 20px;
+        color: var(--text-faint);
+        background: var(--panel-2);
+        border-right: 1px solid var(--line);
+      }
+      .log-val {
+        padding: 18px 22px;
+        color: var(--text-dim);
+        font-family: var(--sans);
+        font-size: 14.5px;
+        line-height: 1.7;
+      }
+      .log-val strong {
+        color: var(--text);
+        font-weight: 600;
+      }
+      .log-val .tag {
+        display: inline-block;
+        font-family: var(--mono);
+        font-size: 11.5px;
+        color: var(--teal);
+        background: rgba(95, 211, 188, 0.08);
+        border: 1px solid rgba(95, 211, 188, 0.25);
+        padding: 2px 8px;
+        border-radius: 4px;
+        margin: 3px 5px 0 0;
+      }
+      @media (max-width: 600px) {
+        .log-row {
+          grid-template-columns: 1fr;
+        }
+        .log-key {
+          border-right: none;
+          border-bottom: 1px solid var(--line);
+        }
+      }
+
+      /* ---------- SKILLS GRID ---------- */
+      .skills-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1px;
+        background: var(--line);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      .skill-cell {
+        background: var(--panel);
+        padding: 26px 22px;
+        transition: background 0.25s;
+      }
+      .skill-cell:hover {
+        background: var(--panel-2);
+      }
+      .skill-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 10px;
+      }
+      .skill-name {
+        font-weight: 600;
+        font-size: 15px;
+        color: var(--text);
+      }
+      .skill-pct {
+        font-family: var(--mono);
+        font-size: 12px;
+        color: var(--amber);
+      }
+      .skill-bar {
+        height: 4px;
+        background: var(--line);
+        border-radius: 2px;
+        overflow: hidden;
+        margin-bottom: 12px;
+      }
+      .skill-bar i {
+        display: block;
+        height: 100%;
+        background: var(--teal);
+        border-radius: 2px;
+      }
+      .skill-desc {
+        font-size: 13px;
+        color: var(--text-faint);
+        line-height: 1.55;
+      }
+
+      @media (max-width: 760px) {
+        .skills-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* ---------- HTB PANEL ---------- */
+      .htb-panel {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 30px clamp(20px, 4vw, 40px) 8px;
+      }
+      .htb-top {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 28px;
+        margin-bottom: 22px;
+      }
+      .htb-stat {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+      .htb-stat-label {
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--text-faint);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+      .htb-stat-val {
+        font-weight: 600;
+        font-size: 15px;
+        color: var(--text);
+      }
+      .htb-stat-val.htb-pct {
+        font-family: var(--mono);
+        color: var(--green);
+        font-size: 17px;
+      }
+
+      .htb-bar {
+        height: 8px;
+        background: var(--line);
+        border-radius: 4px;
+        overflow: hidden;
+        margin-bottom: 30px;
+      }
+      .htb-bar i {
+        display: block;
+        height: 100%;
+        background: var(--green);
+        border-radius: 4px;
+        box-shadow: 0 0 12px rgba(46, 224, 122, 0.5);
+      }
+
+      .htb-machines {
+        border-top: 1px solid var(--line);
+      }
+      .htb-mrow {
+        display: grid;
+        grid-template-columns: 1fr 110px 90px;
+        align-items: center;
+        padding: 13px 0;
+        border-bottom: 1px solid var(--line);
+        font-size: 13.5px;
+      }
+      .htb-mrow.htb-mhead {
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--text-faint);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        padding-top: 18px;
+      }
+      .htb-mrow span:first-child {
+        color: var(--text);
+        font-weight: 500;
+      }
+      .diff-veasy {
+        color: var(--teal);
+        font-family: var(--mono);
+        font-size: 12px;
+      }
+      .m-status {
+        font-family: var(--mono);
+        font-size: 12px;
+      }
+      .m-status.done {
+        color: var(--green);
+      }
+      .m-status.pending {
+        color: var(--text-faint);
+      }
+
+      .htb-foot {
+        padding: 18px 0 14px;
+        font-size: 13px;
+        color: var(--text-dim);
+      }
+      .htb-foot strong {
+        color: var(--text);
+      }
+
+      @media (max-width: 600px) {
+        .htb-mrow {
+          grid-template-columns: 1fr 80px 60px;
+          font-size: 12.5px;
+        }
+      }
+
+      /* ---------- PROJECTS ---------- */
+      .proj-list {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+      .proj-card {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 28px 30px;
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        gap: 24px;
+        align-items: start;
+        transition:
+          border-color 0.25s,
+          transform 0.25s;
+      }
+      .proj-card:hover {
+        border-color: var(--amber-dim);
+        transform: translateY(-2px);
+      }
+      .proj-id {
+        font-family: var(--mono);
+        font-size: 12px;
+        color: var(--text-faint);
+        padding-top: 3px;
+      }
+      .proj-name {
+        font-weight: 700;
+        font-size: 17px;
+        color: var(--text);
+        margin-bottom: 8px;
+      }
+      .proj-desc {
+        color: var(--text-dim);
+        font-size: 14px;
+        line-height: 1.7;
+        max-width: 520px;
+      }
+      .proj-stack {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        margin-top: 12px;
+      }
+      .proj-stack span {
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--text-dim);
+        background: var(--panel-2);
+        border: 1px solid var(--line);
+        padding: 3px 9px;
+        border-radius: 4px;
+      }
+      .proj-status {
+        font-family: var(--mono);
+        font-size: 11px;
+        padding: 5px 11px;
+        border-radius: 20px;
+        white-space: nowrap;
+        height: fit-content;
+        border: 1px solid;
+      }
+      .proj-status.live {
+        color: var(--green);
+        border-color: rgba(46, 224, 122, 0.35);
+        background: rgba(46, 224, 122, 0.07);
+      }
+      .proj-status.complete {
+        color: var(--amber);
+        border-color: rgba(255, 180, 84, 0.35);
+        background: rgba(255, 180, 84, 0.07);
+      }
+
+      @media (max-width: 680px) {
+        .proj-card {
+          grid-template-columns: 1fr;
+        }
+        .proj-status {
+          justify-self: flex-start;
+        }
+      }
+
+      /* ---------- CONTACT ---------- */
+      .contact-term {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      .contact-body {
+        font-family: var(--mono);
+        font-size: 14px;
+        padding: 32px clamp(20px, 4vw, 44px);
+      }
+      .c-row {
+        display: flex;
+        align-items: baseline;
+        gap: 14px;
+        padding: 13px 0;
+        border-bottom: 1px dashed var(--line);
+        flex-wrap: wrap;
+      }
+      .c-row:last-child {
+        border-bottom: none;
+      }
+      .c-key {
+        color: var(--text-faint);
+        width: 90px;
+        flex-shrink: 0;
+      }
+      .c-val {
+        color: var(--text);
+      }
+      .c-val a {
+        color: var(--amber);
+        transition: opacity 0.2s;
+      }
+      .c-val a:hover {
+        opacity: 0.7;
+        text-decoration: underline;
+      }
+
+      footer {
+        text-align: center;
+        padding: 36px 0 48px;
+        font-family: var(--mono);
+        font-size: 12px;
+        color: var(--text-faint);
+      }
+
+      /* scroll reveal */
+      .reveal {
+        opacity: 0;
+        transform: translateY(18px);
+        transition:
+          opacity 0.6s ease,
+          transform 0.6s ease;
+      }
+      .reveal.in {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation: none !important;
+          transition: none !important;
+        }
+        .reveal {
+          opacity: 1;
+          transform: none;
+        }
+      }
+
+      a:focus-visible,
+      button:focus-visible {
+        outline: 2px solid var(--amber);
+        outline-offset: 3px;
+        border-radius: 3px;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <div class="wrap">
+        <div class="nav-logo"><span class="dot"></span> N4NO</div>
+        <div class="nav-links">
+          <a href="#about">whoami</a>
+          <span>/</span>
+          <a href="#skills">skills</a>
+          <span>/</span>
+          <a href="#htb">htb</a>
+          <span>/</span>
+          <a href="#projects">projects</a>
+          <span>/</span>
+          <a href="#contact">contact</a>
+        </div>
+      </div>
+    </nav>
+
+    <header class="hero">
+      <div class="wrap">
+        <div class="terminal">
+          <div class="term-bar">
+            <div class="tdot"></div>
+            <div class="tdot"></div>
+            <div class="tdot"></div>
+            <span class="term-title">n4no@portfolio: ~</span>
+          </div>
+          <div class="term-body">
+            <div class="term-line">
+              <span class="prompt">n4no@kali</span><span class="path">:~$</span>
+              <span class="typed" id="typedLine"></span
+              ><span class="cursor" id="cur"></span>
+            </div>
+          </div>
+        </div>
+
+        <h1 class="hero-name">N4NO<span class="x">_</span></h1>
+        <p class="hero-role">
+          <strong>CHEAN SOPHANNETH</strong> — Computer Networking &amp; Cyber
+          Security student building hands-on skill in SIEM monitoring, intrusion
+          detection, and enterprise system administration. Seeking an internship
+          in network security and cybersecurity operations.
+        </p>
+
+        <div class="status-row">
+          <div class="status-chip">PHNOM PENH, KH</div>
+          <div class="status-chip">BELTEI UNIVERSITY</div>
+          <div class="status-chip">KALI LINUX</div>
+          <div class="status-chip">OPEN TO INTERNSHIP</div>
+        </div>
+      </div>
+    </header>
+
+    <section id="about">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <span class="sec-tag">whoami</span>
+          <h2 class="sec-title">Profile</h2>
+        </div>
+
+        <div class="log-block reveal">
+          <div class="log-row">
+            <div class="log-key">user</div>
+            <div class="log-val">
+              <strong>CHEAN SOPHANNETH</strong> (N4NO) — Computer Networking
+              &amp; Cyber Security student at BELTEI International University,
+              based in Phnom Penh, Cambodia.
+            </div>
+          </div>
+          <div class="log-row">
+            <div class="log-key">objective</div>
+            <div class="log-val">
+              Seeking an internship to gain hands-on experience in network
+              security, system administration, and cybersecurity operations.
+              <div>
+                <span class="tag">Network Security</span>
+                <span class="tag">System Administration</span>
+                <span class="tag">IT Support</span>
+                <span class="tag">Security Monitoring</span>
+              </div>
+            </div>
+          </div>
+          <div class="log-row">
+            <div class="log-key">lab_env</div>
+            <div class="log-val">
+              Builds practice environments using
+              <strong>VMware Workstation</strong>, running Windows Server/AD DS
+              alongside <strong>Kali Linux</strong> and Proton VPN for isolated
+              security testing.
+            </div>
+          </div>
+          <div class="log-row">
+            <div class="log-key">education</div>
+            <div class="log-val">
+              Bachelor of Computer Networking and Cyber Security — BELTEI
+              International University, Year 2. Coursework includes Cisco CCNA
+              1: Introduction to Networks and Introduction to Cybersecurity.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="skills">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <span class="sec-tag">capabilities</span>
+          <h2 class="sec-title">Skills &amp; Tooling</h2>
+          <p class="sec-sub">
+            Core areas of practice, ranked by current depth of hands-on
+            experience.
+          </p>
+        </div>
+
+        <div class="skills-grid reveal">
+          <div class="skill-cell">
+            <div class="skill-head">
+              <span class="skill-name">Security Monitoring (SIEM)</span
+              ><span class="skill-pct">80%</span>
+            </div>
+            <div class="skill-bar"><i style="width: 80%"></i></div>
+            <div class="skill-desc">
+              Installed and configured Wazuh on Linux; monitored system logs and
+              analyzed security alerts.
+            </div>
+          </div>
+          <div class="skill-cell">
+            <div class="skill-head">
+              <span class="skill-name">IDS / IPS</span
+              ><span class="skill-pct">78%</span>
+            </div>
+            <div class="skill-bar"><i style="width: 78%"></i></div>
+            <div class="skill-desc">
+              Deployed Snort &amp; Suricata for network intrusion detection,
+              with custom rules for suspicious traffic.
+            </div>
+          </div>
+          <div class="skill-cell">
+            <div class="skill-head">
+              <span class="skill-name">Network Analysis</span
+              ><span class="skill-pct">82%</span>
+            </div>
+            <div class="skill-bar"><i style="width: 82%"></i></div>
+            <div class="skill-desc">
+              Packet capture &amp; analysis with Wireshark; network scanning and
+              enumeration with Nmap.
+            </div>
+          </div>
+          <div class="skill-cell">
+            <div class="skill-head">
+              <span class="skill-name">Windows Server &amp; AD</span
+              ><span class="skill-pct">75%</span>
+            </div>
+            <div class="skill-bar"><i style="width: 75%"></i></div>
+            <div class="skill-desc">
+              AD DS deployment, domain controller promotion, OUs, users,
+              security groups, and GPO basics.
+            </div>
+          </div>
+          <div class="skill-cell">
+            <div class="skill-head">
+              <span class="skill-name">Networking Fundamentals</span
+              ><span class="skill-pct">80%</span>
+            </div>
+            <div class="skill-bar"><i style="width: 80%"></i></div>
+            <div class="skill-desc">
+              TCP/IP, IPv4 subnetting, DNS &amp; DHCP, NIC teaming, and Cisco
+              Packet Tracer labs.
+            </div>
+          </div>
+          <div class="skill-cell">
+            <div class="skill-head">
+              <span class="skill-name">System &amp; File Server Admin</span
+              ><span class="skill-pct">76%</span>
+            </div>
+            <div class="skill-bar"><i style="width: 76%"></i></div>
+            <div class="skill-desc">
+              Centralized file server setup, shared permissions, iSCSI storage,
+              and replication between servers.
+            </div>
+          </div>
+          <div class="skill-cell">
+            <div class="skill-head">
+              <span class="skill-name">Virtualization</span
+              ><span class="skill-pct">74%</span>
+            </div>
+            <div class="skill-bar"><i style="width: 74%"></i></div>
+            <div class="skill-desc">
+              VMware Workstation lab environments for Windows Server, AD, and
+              isolated security testing.
+            </div>
+          </div>
+          <div class="skill-cell">
+            <div class="skill-head">
+              <span class="skill-name">Scripting</span
+              ><span class="skill-pct">65%</span>
+            </div>
+            <div class="skill-bar"><i style="width: 65%"></i></div>
+            <div class="skill-desc">
+              Python, C++, and Bash for automation, plus Lua for game-server
+              logic.
+            </div>
+          </div>
+          <div class="skill-cell">
+            <div class="skill-head">
+              <span class="skill-name">Backend Development</span
+              ><span class="skill-pct">75%</span>
+            </div>
+            <div class="skill-bar"><i style="width: 75%"></i></div>
+            <div class="skill-desc">
+              Node.js &amp; discord.js for production bots — role automation and
+              multi-server architecture.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="htb">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <span class="sec-tag">hack the box</span>
+          <h2 class="sec-title">HTB Progress</h2>
+          <p class="sec-sub">
+            Active practice on Hack The Box Academy &amp; Labs — tracked, not
+            claimed.
+          </p>
+        </div>
+
+        <div class="htb-panel reveal">
+          <div class="htb-top">
+            <div class="htb-stat">
+              <span class="htb-stat-label">Path</span>
+              <span class="htb-stat-val">Junior Cybersecurity Analyst</span>
+            </div>
+            <div class="htb-stat">
+              <span class="htb-stat-label">Rank</span>
+              <span class="htb-stat-val">Apprentice · Lvl 29</span>
+            </div>
+            <div class="htb-stat">
+              <span class="htb-stat-label">Completion</span>
+              <span class="htb-stat-val htb-pct">74.8%</span>
+            </div>
+          </div>
+
+          <div class="htb-bar"><i style="width: 74.8%"></i></div>
+
+          <div class="htb-machines">
+            <div class="htb-mrow htb-mhead">
+              <span>Machine</span><span>Difficulty</span><span>Status</span>
+            </div>
+            <div class="htb-mrow">
+              <span>Meow</span><span class="diff-veasy">Very Easy</span
+              ><span class="m-status done">100%</span>
+            </div>
+            <div class="htb-mrow">
+              <span>Fawn</span><span class="diff-veasy">Very Easy</span
+              ><span class="m-status done">100%</span>
+            </div>
+            <div class="htb-mrow">
+              <span>Dancing</span><span class="diff-veasy">Very Easy</span
+              ><span class="m-status done">100%</span>
+            </div>
+            <div class="htb-mrow">
+              <span>Redeemer</span><span class="diff-veasy">Very Easy</span
+              ><span class="m-status done">100%</span>
+            </div>
+            <div class="htb-mrow">
+              <span>Explosion</span><span class="diff-veasy">Very Easy</span
+              ><span class="m-status pending">0%</span>
+            </div>
+          </div>
+
+          <div class="htb-foot">
+            <span
+              >In progress:
+              <strong>Windows Event Logs &amp; Finding Evil</strong> (Defensive
+              · Tier II)</span
+            >
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <span class="sec-tag">portfolio</span>
+          <h2 class="sec-title">Selected Work</h2>
+          <p class="sec-sub">
+            A mix of security practice and applied infrastructure projects.
+          </p>
+        </div>
+
+        <div class="proj-list reveal">
+          <div class="proj-card">
+            <div class="proj-id">01</div>
+            <div>
+              <div class="proj-name">Security Monitoring Lab — Wazuh SIEM</div>
+              <div class="proj-desc">
+                Installed and configured Wazuh on Linux to monitor system logs
+                and analyze security alerts in real time.
+              </div>
+              <div class="proj-stack">
+                <span>Wazuh</span><span>Linux</span><span>SIEM</span>
+              </div>
+            </div>
+            <div class="proj-status complete">COMPLETE</div>
+          </div>
+
+          <div class="proj-card">
+            <div class="proj-id">02</div>
+            <div>
+              <div class="proj-name">
+                IDS/IPS Deployment — Snort &amp; Suricata
+              </div>
+              <div class="proj-desc">
+                Configured Snort and Suricata for network intrusion detection,
+                writing custom rules to flag suspicious traffic patterns.
+              </div>
+              <div class="proj-stack">
+                <span>Snort</span><span>Suricata</span><span>IDS/IPS</span>
+              </div>
+            </div>
+            <div class="proj-status complete">COMPLETE</div>
+          </div>
+
+          <div class="proj-card">
+            <div class="proj-id">03</div>
+            <div>
+              <div class="proj-name">
+                Windows Server &amp; Active Directory Lab
+              </div>
+              <div class="proj-desc">
+                Deployed Windows Server + client VMs in VMware, promoted a
+                domain controller, configured AD DS/DNS, OUs, users, security
+                groups, and remote administration via Windows Admin Center.
+              </div>
+              <div class="proj-stack">
+                <span>Windows Server</span><span>Active Directory</span
+                ><span>VMware</span>
+              </div>
+            </div>
+            <div class="proj-status complete">COMPLETE</div>
+          </div>
+
+          <div class="proj-card">
+            <div class="proj-id">04</div>
+            <div>
+              <div class="proj-name">Enterprise File Server Administration</div>
+              <div class="proj-desc">
+                Configured centralized file storage with departmental shared
+                folders (HR, IT, Management), access permissions, file
+                replication, iSCSI storage, and NIC teaming for redundancy.
+              </div>
+              <div class="proj-stack">
+                <span>File Server</span><span>iSCSI</span
+                ><span>NIC Teaming</span>
+              </div>
+            </div>
+            <div class="proj-status complete">COMPLETE</div>
+          </div>
+
+          <div class="proj-card">
+            <div class="proj-id">05</div>
+            <div>
+              <div class="proj-name">
+                Network Analysis — Wireshark &amp; Nmap
+              </div>
+              <div class="proj-desc">
+                Captured and analyzed live network packets with Wireshark, and
+                performed structured network scanning with Nmap.
+              </div>
+              <div class="proj-stack">
+                <span>Wireshark</span><span>Nmap</span
+                ><span>Network Analysis</span>
+              </div>
+            </div>
+            <div class="proj-status complete">COMPLETE</div>
+          </div>
+
+          <div class="proj-card">
+            <div class="proj-id">06</div>
+            <div>
+              <div class="proj-name">Bakong City — Discord Whitelist Bot</div>
+              <div class="proj-desc">
+                Production whitelist application system for a FiveM roleplay
+                server. Multi-server support, styled embeds, and fully automated
+                role assignment on approval.
+              </div>
+              <div class="proj-stack">
+                <span>Node.js</span><span>discord.js v14</span
+                ><span>Automation</span>
+              </div>
+            </div>
+            <div class="proj-status complete">SHIPPED</div>
+          </div>
+
+          <div class="proj-card">
+            <div class="proj-id">07</div>
+            <div>
+              <div class="proj-name">QBCore Auto-Respawn System</div>
+              <div class="proj-desc">
+                Lua-based respawn script for a FiveM server, using randomized
+                dual-location logic to keep gameplay unpredictable and server
+                load balanced.
+              </div>
+              <div class="proj-stack">
+                <span>Lua</span><span>QBCore</span><span>FiveM</span>
+              </div>
+            </div>
+            <div class="proj-status complete">SHIPPED</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <span class="sec-tag">get in touch</span>
+          <h2 class="sec-title">Contact</h2>
+        </div>
+
+        <div class="contact-term reveal">
+          <div class="term-bar">
+            <div class="tdot"></div>
+            <div class="tdot"></div>
+            <div class="tdot"></div>
+            <span class="term-title">contact.sh</span>
+          </div>
+          <div class="contact-body">
+            <div class="c-row">
+              <div class="c-key">email</div>
+              <div class="c-val">
+                <a href="mailto:cheansophanneth@gmail.com"
+                  >cheansophanneth@gmail.com</a
+                >
+              </div>
+            </div>
+            <div class="c-row">
+              <div class="c-key">phone</div>
+              <div class="c-val">
+                <a href="tel:+855972332003">+855 97 233 2003</a>
+              </div>
+            </div>
+            <div class="c-row">
+              <div class="c-key">discord</div>
+              <div class="c-val">
+                @n4no
+                <span style="color: var(--text-faint)">— fastest reply</span>
+              </div>
+            </div>
+            <div class="c-row">
+              <div class="c-key">location</div>
+              <div class="c-val">Phnom Penh, Cambodia</div>
+            </div>
+            <div class="c-row">
+              <div class="c-key">status</div>
+              <div class="c-val" style="color: var(--green)">
+                ● open to internship &amp; security/networking work
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>N4NO © 2026 — built with intent, not a template.</footer>
+
+    <script>
+      // typed terminal line
+      const line = "cat about.txt && echo 'NETWORKING + CYBER SECURITY'";
+      const el = document.getElementById("typedLine");
+      const cur = document.getElementById("cur");
+      let i = 0;
+      function type() {
+        if (i <= line.length) {
+          el.textContent = line.slice(0, i);
+          i++;
+          setTimeout(type, 32);
+        }
+      }
+      type();
+
+      // scroll reveal
+      const reveals = document.querySelectorAll(".reveal");
+      const obs = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.classList.add("in");
+              obs.unobserve(e.target);
+            }
+          });
+        },
+        { threshold: 0.12 },
+      );
+      reveals.forEach((r) => obs.observe(r));
+    </script>
+  </body>
+</html>
